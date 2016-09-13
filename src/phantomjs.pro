@@ -2,6 +2,7 @@ TEMPLATE = app
 TARGET = phantomjs
 QT += network webkitwidgets
 CONFIG += console
+CONFIG += c++11
 
 DESTDIR = ../bin
 

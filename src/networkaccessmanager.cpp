@@ -306,7 +306,9 @@ void NetworkAccessManager::setCookieJar(QNetworkCookieJar* cookieJar)
 QNetworkReply* NetworkAccessManager::createRequest(Operation op, const QNetworkRequest& request, QIODevice* outgoingData)
 {
     QNetworkRequest req(request);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
     req.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+#endif
     QString scheme = req.url().scheme().toLower();
 
     if (!QSslSocket::supportsSsl()) {
@@ -391,7 +393,9 @@ QNetworkReply* NetworkAccessManager::createRequest(Operation op, const QNetworkR
     connect(reply, &QNetworkReply::readyRead, this, &NetworkAccessManager::handleStarted);
     connect(reply, &QNetworkReply::sslErrors, this, &NetworkAccessManager::handleSslErrors);
     connect(reply, static_cast<void(QNetworkReply::*)(QNetworkReply::NetworkError)>(&QNetworkReply::error), this, &NetworkAccessManager::handleNetworkError);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
     connect(reply, &QNetworkReply::redirected, this, &NetworkAccessManager::handleRedirect);
+#endif
 
     // synchronous requests will be finished at this point
     if (reply->isFinished()) {
